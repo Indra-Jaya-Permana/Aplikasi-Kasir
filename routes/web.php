@@ -1,34 +1,24 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\DetailPenjualanController;
-use App\Http\Controllers\UserController; // Pastikan UserController diimpor jika digunakan 
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+use App\Http\Controllers\DashboardController;
 
 // Autentikasi
 Route::get('/', [AuthController::class, 'loginForm'])->name('login');
 Route::post('/', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// CRUD untuk data dengan middleware 'auth'
-Route::middleware('auth')->group(function () {
-    // Rute untuk Pelanggan
-    Route::resource('pelanggan', PelangganController::class);
-    // Rute untuk Produk
-    Route::resource('produk', ProdukController::class);
-    // Rute untuk Penjualan
-    Route::resource('penjualan', PenjualanController::class);
-    // Rute untuk Detail Penjualan
-    Route::resource('detail-penjualan', DetailPenjualanController::class);
-});
 
-// Rute untuk pengguna, hanya dapat diakses oleh admin
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::resource('users', UserController::class);
+// Middleware auth untuk melindungi halaman tertentu
+Route::middleware('auth')->group(function () {
+    Route::resource('pelanggan', PelangganController::class);
+    Route::resource('produk', ProdukController::class);
+    Route::resource('penjualan', PenjualanController::class);
+    Route::resource('detail-penjualan', DetailPenjualanController::class);
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
