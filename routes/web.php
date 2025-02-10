@@ -11,6 +11,8 @@ use App\Http\Controllers\DashboardController;
 // Autentikasi
 Route::get('/', [AuthController::class, 'loginForm'])->name('login');
 Route::post('/', [AuthController::class, 'login']);
+Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 

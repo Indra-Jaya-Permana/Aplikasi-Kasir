@@ -10,6 +10,7 @@
     <nav>
         <ul>
             <li><a href="{{ route('login') }}">Login</a></li>
+            <li><a href="{{ route('register') }}">Register</a></li>
             <li><a href="{{ route('pelanggan.index') }}">Pelanggan</a></li>
             <li><a href="{{ route('produk.index') }}">Produk</a></li>
             <li><a href="{{ route('penjualan.index') }}">Penjualan</a></li>

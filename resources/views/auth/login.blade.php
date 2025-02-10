@@ -16,4 +16,5 @@
         </div>
         <button type="submit">Login</button>
     </form>
+    <p>Belum punya akun? <a href="{{ route('register') }}">Daftar di sini</a>.</p>
 @endsection
