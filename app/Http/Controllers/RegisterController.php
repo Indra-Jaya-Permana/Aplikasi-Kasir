@@ -16,6 +16,9 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
+        // Debugging: cek apakah data terkirim dengan benar
+        // dd($request->all());
+
         // Validasi input dari form
         $request->validate([
             'name' => 'required|string|max:255',
@@ -30,6 +33,11 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password), // Pastikan password di-hash
             'role' => 'petugas', // Set role otomatis jadi petugas
         ]);
+
+        // Debugging: cek apakah user berhasil dibuat
+        if (!$user) {
+            return redirect()->back()->with('error', 'Registrasi gagal. Silakan coba lagi.');
+        }
 
         // Login otomatis setelah registrasi
         Auth::login($user);

@@ -8,12 +8,15 @@ use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\DetailPenjualanController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RegisterController;
+
 // Autentikasi
-Route::get('/', [AuthController::class, 'loginForm'])->name('login');
-Route::post('/', [AuthController::class, 'login']);
+// Autentikasi
+Route::get('/', [AuthController::class, 'loginForm'])->name('login.form'); // Nama ini masih login.form
+Route::post('/', [AuthController::class, 'login'])->name('login'); // Tambahkan ini
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register.form');
 Route::post('/register', [RegisterController::class, 'register'])->name('register');
+
 
 
 // Middleware auth untuk melindungi halaman tertentu
@@ -23,4 +26,4 @@ Route::middleware('auth')->group(function () {
     Route::resource('penjualan', PenjualanController::class);
     Route::resource('detail-penjualan', DetailPenjualanController::class);
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-});
+    });
