@@ -2,85 +2,62 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pelanggan; // Pastikan model Pelanggan sudah ada
+use App\Models\Pelanggan;
 use Illuminate\Http\Request;
 
 class PelangganController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $pelanggans = Pelanggan::all(); // Ambil semua data pelanggan
-        return view('pelanggan.index', compact('pelanggans')); // Tampilkan view dengan data pelanggan
+        $pelanggans = Pelanggan::all();
+        return view('pelanggan.index', compact('pelanggans'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view('pelanggan.create'); // Tampilkan form untuk membuat pelanggan baru
+        return view('pelanggan.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:pelanggans',
-            // Tambahkan aturan validasi lain jika diperlukan
         ]);
 
-        Pelanggan::create($validatedData); // Simpan data pelanggan baru ke database
-        return redirect()->route('pelanggan.index')->with('success', 'Customer created successfully!');
+        Pelanggan::create($validatedData);
+        return redirect()->route('pelanggan.index')->with('success', 'Pelanggan berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show($id)
     {
-        $pelanggan = Pelanggan::findOrFail($id); // Ambil pelanggan berdasarkan ID
-        return view('pelanggan.show', compact('pelanggan')); // Tampilkan detail pelanggan
+        $pelanggan = Pelanggan::findOrFail($id);
+        return view('pelanggan.show', compact('pelanggan'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit($id)
     {
-        $pelanggan = Pelanggan::findOrFail($id); // Ambil pelanggan berdasarkan ID
-        return view('pelanggan.edit', compact('pelanggan')); // Tampilkan form edit
+        $pelanggan = Pelanggan::findOrFail($id);
+        return view('pelanggan.edit', compact('pelanggan'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        $pelanggan = Pelanggan::findOrFail($id); // Ambil pelanggan berdasarkan ID
+        $pelanggan = Pelanggan::findOrFail($id);
 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:pelanggans,email,' . $pelanggan->id,
-            // Tambahkan aturan validasi lain jika diperlukan
         ]);
 
-        $pelanggan->update($validatedData); // Perbarui data pelanggan
-        return redirect()->route('pelanggan.index')->with('success', 'Customer updated successfully!');
+        $pelanggan->update($validatedData);
+        return redirect()->route('pelanggan.index')->with('success', 'Pelanggan berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $pelanggan = Pelanggan::findOrFail($id); // Ambil pelanggan berdasarkan ID
-        $pelanggan->delete(); // Hapus pelanggan
-        return redirect()->route('pelanggan.index')->with('success', 'Customer deleted successfully!');
+        $pelanggan = Pelanggan::findOrFail($id);
+        $pelanggan->delete();
+        return redirect()->route('pelanggan.index')->with('success', 'Pelanggan berhasil dihapus.');
     }
 }
