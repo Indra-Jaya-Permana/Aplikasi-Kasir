@@ -7,13 +7,13 @@ use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\DetailPenjualanController;
 use App\Http\Controllers\DashboardController;
-
+use App\Http\Controllers\RegisterController;
 // Autentikasi
 Route::get('/', [AuthController::class, 'loginForm'])->name('login');
 Route::post('/', [AuthController::class, 'login']);
-Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register.form');
+Route::post('/register', [RegisterController::class, 'register'])->name('register');
 
 
 // Middleware auth untuk melindungi halaman tertentu
