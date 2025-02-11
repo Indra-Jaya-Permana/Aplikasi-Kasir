@@ -1,46 +1,46 @@
-@extends('layouts.app')
+@extends('layouts/app')
+
+@section('title', 'Dashboard')
 
 @section('content')
-<div class="container">
-    
-    <h1 class="mb-4">DASHBOARD</h1>
+    <h1>DASHBOARD</h1>
     <div class="row">
         <div class="col-md-3">
-            <div class="card text-white bg-primary mb-3">
+            <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Total Pelanggan</h5>
-                    <p class="card-text">{{ $totalPelanggan }}</p>
+                    <h5>Total Pelanggan</h5>
+                    <p>{{ $totalPelanggan }}</p>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-white bg-success mb-3">
+            <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Total Produk</h5>
-                    <p class="card-text">{{ $totalProduk }}</p>
+                    <h5>Total Produk</h5>
+                    <p>{{ $totalProduk }}</p>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-white bg-info mb-3">
+            <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Total Penjualan</h5>
-                    <p class="card-text">{{ $totalPenjualan }}</p>
+                    <h5>Total Penjualan</h5>
+                    <p>{{ $totalPenjualan }}</p>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-white bg-warning mb-3">
+            <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Pendapatan Hari Ini</h5>
-                    <p class="card-text">Rp {{ number_format($pendapatanHariIni, 0, ',', '.') }}</p>
+                    <h5>Pendapatan Hari Ini</h5>
+                    <p>Rp {{ number_format($pendapatanHariIni, 0, ',', '.') }}</p>
                 </div>
             </div>
         </div>
     </div>
-
-    <h2 class="mt-4">Transaksi Terbaru</h2>
-    <table class="table">
+    
+    <h2>Transaksi Terbaru</h2>
+    <table>
         <thead>
             <tr>
                 <th>No</th>
@@ -59,7 +59,5 @@
             </tr>
             @endforeach
         </tbody>
-        
     </table>
-</div>
 @endsection

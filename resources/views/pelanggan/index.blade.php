@@ -5,6 +5,11 @@
 @section('content')
     <h1>Data Pelanggan</h1>
     <a href="{{ route('pelanggan.create') }}">Tambah Pelanggan</a>
+
+    @if(session('success'))
+        <p>{{ session('success') }}</p>
+    @endif
+
     <table>
         <thead>
             <tr>
@@ -25,7 +30,7 @@
                         <form action="{{ route('pelanggan.destroy', $pelanggan->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit">Hapus</button>
+                            <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus pelanggan ini?')">Hapus</button>
                         </form>
                     </td>
                 </tr>
