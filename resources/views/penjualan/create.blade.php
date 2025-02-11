@@ -19,6 +19,10 @@
                 @endforeach
             </select>
         </div>
+        <div>
+            <label for="total_harga">Total Harga:</label>
+            <input type="number" name="total_harga" required>
+        </div>
         <button type="submit">Simpan</button>
     </form>
 @endsection
