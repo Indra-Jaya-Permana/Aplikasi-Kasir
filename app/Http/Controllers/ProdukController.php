@@ -21,8 +21,9 @@ class ProdukController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric',
+            'nama_produk' => 'required|string|max:255',
+            'harga' => 'required|numeric',
+            'stok' => 'required|integer',
         ]);
 
         Produk::create($validatedData);
@@ -37,11 +38,16 @@ class ProdukController extends Controller
 
     public function update(Request $request, $id)
     {
+        
         $produk = Produk::findOrFail($id);
 
+        // Debugging untuk melihat apakah data dikirim dengan benar
+        // dd($request->all());
+
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric',
+            'nama_produk' => 'required|string|max:255',
+            'harga' => 'required|numeric',
+            'stok' => 'required|integer',
         ]);
 
         $produk->update($validatedData);

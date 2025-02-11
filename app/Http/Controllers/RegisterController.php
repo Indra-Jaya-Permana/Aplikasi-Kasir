@@ -16,7 +16,7 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        // Debugging: cek apakah data terkirim dengan benar
+        // Debugging: Cek apakah data terkirim dengan benar
         // dd($request->all());
 
         // Validasi input dari form
@@ -34,7 +34,7 @@ class RegisterController extends Controller
             'role' => 'petugas', // Set role otomatis jadi petugas
         ]);
 
-        // Debugging: cek apakah user berhasil dibuat
+        // Debugging: Cek apakah user berhasil dibuat
         if (!$user) {
             return redirect()->back()->with('error', 'Registrasi gagal. Silakan coba lagi.');
         }
@@ -43,6 +43,6 @@ class RegisterController extends Controller
         Auth::login($user);
 
         // Redirect ke dashboard setelah berhasil register
-        return redirect()->route('dashboard')->with('success', 'Registrasi berhasil!');
+        return redirect()->route('login')->with('success', 'Registrasi berhasil!');
     }
 }
