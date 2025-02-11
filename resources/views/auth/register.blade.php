@@ -8,15 +8,18 @@
         @csrf
         <div>
             <label for="name">Name:</label>
-            <input type="text" name="name" id="name" required>
+            <input type="text" name="name" id="name" value="{{ old('name') }}" required>
+            @error('name') <p style="color: red;">{{ $message }}</p> @enderror
         </div>
         <div>
             <label for="email">Email:</label>
-            <input type="email" name="email" id="email" required>
+            <input type="email" name="email" id="email" value="{{ old('email') }}" required>
+            @error('email') <p style="color: red;">{{ $message }}</p> @enderror
         </div>
         <div>
             <label for="password">Password:</label>
             <input type="password" name="password" id="password" required>
+            @error('password') <p style="color: red;">{{ $message }}</p> @enderror
         </div>
         <div>
             <label for="password_confirmation">Confirm Password:</label>
