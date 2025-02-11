@@ -9,5 +9,5 @@ class Pelanggan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nama', 'email', 'telepon', 'alamat'];
+    protected $fillable = ['nama_pelanggan', 'alamat', 'nomor_telepon'];
 }
