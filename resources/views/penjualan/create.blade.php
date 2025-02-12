@@ -15,17 +15,17 @@
         @csrf
         <div>
             <label for="tanggal_penjualan">Tanggal Penjualan:</label>
-            <input type="date" name="tanggal_penjualan" required>
+            <input type="date" id="tanggal_penjualan" name="tanggal_penjualan" required>
         </div>
 
         <div>
     <label for="pelanggan_id">Pelanggan:</label>
-    <select id="pelanggan_id" name="pelanggan_id" onchange="togglePelangganInput(); updateTotal();" required>
+    <select id="pelanggan_id" name="pelanggan_id" onchange="updateTotal();" required>
         <option value="">Pilih Pelanggan</option>
         @foreach($pelanggans as $pelanggan)
             <option value="{{ $pelanggan->id }}">{{ $pelanggan->id }} - {{ $pelanggan->nama_pelanggan }}</option>
         @endforeach
-        <option value="non-member">Bukan Member</option>
+        
     </select>
         </div>
 
@@ -34,18 +34,7 @@
             <input type="text" name="nama_pelanggan" placeholder="Masukkan Nama Pelanggan">
         </div>
 
-        <script>
-            function togglePelangganInput() {
-                const pelangganSelect = document.getElementById("pelanggan_id");
-                const namaPelangganInput = document.getElementById("nama_pelanggan_input");
-                $pelanggan.id = 0;
-                if (pelangganSelect.value === "non-member") {
-                    namaPelangganInput.style.display = "block";
-                } else {
-                    namaPelangganInput.style.display = "none";
-                }
-            }
-        </script>
+       
 
 
         <div id="produk_section">
@@ -74,42 +63,42 @@
     </form>
 
     <script>
-        function togglePelangganInput() {
-            const pelangganSelect = document.getElementById("pelanggan_id");
-            const namaPelangganInput = document.getElementById("nama_pelanggan_input");
+    function addProductField() {
+        const additionalProducts = document.getElementById("additional_products");
+        const produkSection = document.getElementById("produk_section");
+        const newProductField = produkSection.cloneNode(true);
+        additionalProducts.appendChild(newProductField);
+    }
 
-            if (pelangganSelect.value === "non-member") {
-                namaPelangganInput.style.display = "block";
-            } else {
-                namaPelangganInput.style.display = "none";
-            }
+    function updateTotal() {
+        let totalHarga = 0;
+        const produkSelects = document.querySelectorAll('.produk-select');
+        const jumlahInputs = document.querySelectorAll('.jumlah-produk');
+        const pelangganId = parseInt(document.getElementById("pelanggan_id").value) || 0; // Ambil ID pelanggan
+
+        produkSelects.forEach((select, index) => {
+            const harga = parseFloat(select.options[select.selectedIndex]?.getAttribute('data-harga') || 0);
+            const jumlah = parseInt(jumlahInputs[index]?.value) || 1;
+            totalHarga += harga * jumlah;
+        });
+
+        // Jika pelanggan ID lebih dari 2, berikan diskon 10%
+        if (pelangganId >= 2) {
+            totalHarga *= 0.9; // Diskon 10%
         }
 
-        function addProductField() {
-            const additionalProducts = document.getElementById("additional_products");
-            const produkSection = document.getElementById("produk_section");
-            const newProductField = produkSection.cloneNode(true);
-            additionalProducts.appendChild(newProductField);
-        }
+        document.getElementById("total_harga").value = totalHarga.toFixed(2);
+    }
 
-        function updateTotal() {
-            let totalHarga = 0;
-            const produkSelects = document.querySelectorAll('.produk-select');
-            const jumlahInputs = document.querySelectorAll('.jumlah-produk');
-            const pelangganSelect = document.getElementById("pelanggan_id").value;
+    // Mendapatkan tanggal hari ini dalam format YYYY-MM-DD
+    function setTodayDate() {
+        let today = new Date();
+        let formattedDate = today.toISOString().split('T')[0]; // Ambil bagian YYYY-MM-DD saja
+        document.getElementById('tanggal_penjualan').value = formattedDate;
+    }
 
-            produkSelects.forEach((select, index) => {
-                const harga = parseFloat(select.options[select.selectedIndex]?.getAttribute('data-harga') || 0);
-                const jumlah = parseInt(jumlahInputs[index]?.value) || 1;
-                totalHarga += harga * jumlah;
-            });
+    // Panggil fungsi saat halaman dimuat
+    window.onload = setTodayDate;
+</script>
 
-            // Jika pelanggan adalah member (bukan "non-member"), berikan diskon 10%
-            if (pelangganSelect !== "non-member" && pelangganSelect !== "") {
-                totalHarga *= 0.9; // Diskon 10%
-            }
-
-            document.getElementById("total_harga").value = totalHarga.toFixed(2);
-        }
-    </script>
 @endsection

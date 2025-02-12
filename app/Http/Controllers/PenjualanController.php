@@ -40,10 +40,8 @@ class PenjualanController extends Controller
 
         if (!empty($request->pelanggan_id) && $request->pelanggan_id !== "non-member") {
             $penjualan->pelanggan_id = $request->pelanggan_id;
-            $penjualan->bukan_member = null;
         } else {
             $penjualan->pelanggan_id = null;
-            $penjualan->bukan_member = $request->nama_pelanggan ?? 'Tidak Diketahui';
         }
 
         $penjualan->save();
