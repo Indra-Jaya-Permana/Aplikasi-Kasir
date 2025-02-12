@@ -4,6 +4,13 @@
 
 @section('content')
     <h1>Tambah Penjualan</h1>
+
+    @if(session('error'))
+    <div style="color: red;">
+        {{ session('error') }}
+    </div>
+    @endif
+
     <form action="{{ route('penjualan.store') }}" method="POST">
         @csrf
         <div>
@@ -12,32 +19,46 @@
         </div>
 
         <div>
-            <label for="pelanggan_id">Pelanggan:</label>
-            <select id="pelanggan_id" name="pelanggan_id" onchange="togglePelangganInput()" required>
-                <option value="">Pilih Pelanggan</option>
-                @foreach($pelanggans as $pelanggan)
-                    <option value="{{ $pelanggan->id }}">{{ $pelanggan->nama_pelanggan }}</option>
-                @endforeach
-                <option value="non-member">Bukan Member</option>
-            </select>
+    <label for="pelanggan_id">Pelanggan:</label>
+    <select id="pelanggan_id" name="pelanggan_id" onchange="togglePelangganInput(); updateTotal();" required>
+        <option value="">Pilih Pelanggan</option>
+        @foreach($pelanggans as $pelanggan)
+            <option value="{{ $pelanggan->id }}">{{ $pelanggan->id }} - {{ $pelanggan->nama_pelanggan }}</option>
+        @endforeach
+        <option value="non-member">Bukan Member</option>
+    </select>
         </div>
 
-        <div id="nama_pelanggan_input" style="display:none;">
-            <label for="nama_pelanggan">Nama Pelanggan:</label>
+        <div id="nama_pelanggan_input" style="display: none;">
+            <label for="nama_pelanggan">Nama Pelanggan (Bukan Member):</label>
             <input type="text" name="nama_pelanggan" placeholder="Masukkan Nama Pelanggan">
         </div>
 
+        <script>
+            function togglePelangganInput() {
+                const pelangganSelect = document.getElementById("pelanggan_id");
+                const namaPelangganInput = document.getElementById("nama_pelanggan_input");
+                $pelanggan.id = 0;
+                if (pelangganSelect.value === "non-member") {
+                    namaPelangganInput.style.display = "block";
+                } else {
+                    namaPelangganInput.style.display = "none";
+                }
+            }
+        </script>
+
+
         <div id="produk_section">
             <label for="produk[]">Produk:</label>
-            <select name="produk[]" onchange="updateTotal()" required>
+            <select name="produk[]" class="produk-select" onchange="updateTotal()" required>
                 <option value="">Pilih Produk</option>
                 @foreach($produks as $produk)
                     <option value="{{ $produk->id }}" data-harga="{{ $produk->harga }}">{{ $produk->nama_produk }}</option>
                 @endforeach
             </select>
-
+            
             <label for="jumlah_produk[]">Jumlah:</label>
-            <input type="number" name="jumlah_produk[]" value="1" min="1" oninput="updateTotal()" required>
+            <input type="number" name="jumlah_produk[]" value="1" min="1" class="jumlah-produk" oninput="updateTotal()" required>
         </div>
 
         <div id="additional_products"></div>
@@ -53,38 +74,40 @@
     </form>
 
     <script>
-        let totalHarga = 0;
-
-        // Fungsi untuk menampilkan input nama pelanggan jika memilih non-member
         function togglePelangganInput() {
             const pelangganSelect = document.getElementById("pelanggan_id");
             const namaPelangganInput = document.getElementById("nama_pelanggan_input");
-            if (pelangganSelect.value == "non-member") {
+
+            if (pelangganSelect.value === "non-member") {
                 namaPelangganInput.style.display = "block";
             } else {
                 namaPelangganInput.style.display = "none";
             }
         }
 
-        // Fungsi untuk menambahkan pilihan produk baru
         function addProductField() {
-            const produkSection = document.getElementById("produk_section");
             const additionalProducts = document.getElementById("additional_products");
+            const produkSection = document.getElementById("produk_section");
             const newProductField = produkSection.cloneNode(true);
             additionalProducts.appendChild(newProductField);
         }
 
-        // Fungsi untuk menghitung total harga
         function updateTotal() {
-            totalHarga = 0;
-            const produkSelects = document.querySelectorAll('select[name="produk[]"]');
-            const jumlahInputs = document.querySelectorAll('input[name="jumlah_produk[]"]');
+            let totalHarga = 0;
+            const produkSelects = document.querySelectorAll('.produk-select');
+            const jumlahInputs = document.querySelectorAll('.jumlah-produk');
+            const pelangganSelect = document.getElementById("pelanggan_id").value;
 
             produkSelects.forEach((select, index) => {
-                const harga = parseFloat(select.options[select.selectedIndex].getAttribute('data-harga') || 0);
-                const jumlah = parseInt(jumlahInputs[index].value) || 1;
+                const harga = parseFloat(select.options[select.selectedIndex]?.getAttribute('data-harga') || 0);
+                const jumlah = parseInt(jumlahInputs[index]?.value) || 1;
                 totalHarga += harga * jumlah;
             });
+
+            // Jika pelanggan adalah member (bukan "non-member"), berikan diskon 10%
+            if (pelangganSelect !== "non-member" && pelangganSelect !== "") {
+                totalHarga *= 0.9; // Diskon 10%
+            }
 
             document.getElementById("total_harga").value = totalHarga.toFixed(2);
         }

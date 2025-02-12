@@ -15,21 +15,27 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($penjualans as $penjualan)
-                <tr>
-                    <td>{{ $penjualan->tanggal_penjualan }}</td>
-                    <td>{{ $penjualan->total_harga }}</td>
-                    <td>{{ $penjualan->pelanggan->nama_pelanggan }}</td>
-                    <td>
-                        <a href="{{ route('penjualan.show', $penjualan->id) }}">Detail</a>
-                        <form action="{{ route('penjualan.destroy', $penjualan->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">Hapus</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
+    @foreach($penjualans as $penjualan)
+        <tr>
+            <td>{{ $penjualan->tanggal_penjualan }}</td>
+            <td>{{ $penjualan->total_harga }}</td>
+            <td>
+                @if($penjualan->pelanggan_id)
+                    {{ $penjualan->pelanggan->nama_pelanggan }}
+                @else
+                    {{ $penjualan->bukan_member }}
+                @endif
+            </td>
+            <td>
+                <a href="{{ route('penjualan.show', $penjualan->id) }}">Detail</a>
+                <form action="{{ route('penjualan.destroy', $penjualan->id) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit">Hapus</button>
+                </form>
+            </td>
+        </tr>
+    @endforeach
+    </tbody>
     </table>
 @endsection

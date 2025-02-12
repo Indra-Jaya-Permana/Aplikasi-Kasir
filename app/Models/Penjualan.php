@@ -9,7 +9,7 @@ class Penjualan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['tanggal_penjualan', 'total_harga', 'pelanggan_id'];
+    protected $fillable = ['tanggal_penjualan', 'total_harga', 'pelanggan_id', 'bukan_member'];
 
     public function pelanggan()
     {

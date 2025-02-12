@@ -27,32 +27,26 @@ class PenjualanController extends Controller
     // Store a new penjualan
     public function store(Request $request)
     {
-        // Validate and store penjualan
-        $validatedData = $request->validate([
+        $request->validate([
             'tanggal_penjualan' => 'required|date',
+            'total_harga' => 'required|numeric',
             'pelanggan_id' => 'nullable|exists:pelanggans,id',
             'nama_pelanggan' => 'nullable|string',
-            'total_harga' => 'required|numeric',
-            'produk.*' => 'required|exists:produks,id',
-            'jumlah_produk.*' => 'required|numeric',
         ]);
 
-        $penjualanData = [
-            'tanggal_penjualan' => $validatedData['tanggal_penjualan'],
-            'total_harga' => $validatedData['total_harga'],
-            'pelanggan_id' => $validatedData['pelanggan_id'] ?? null,
-        ];
+        $penjualan = new Penjualan();
+        $penjualan->tanggal_penjualan = $request->tanggal_penjualan;
+        $penjualan->total_harga = $request->total_harga;
 
-        $penjualan = Penjualan::create($penjualanData);
-
-        // Save product details
-        foreach ($validatedData['produk'] as $key => $produkId) {
-            $penjualan->detailPenjualans()->create([
-                'produk_id' => $produkId,
-                'jumlah_produk' => $validatedData['jumlah_produk'][$key],
-                'subtotal' => $validatedData['jumlah_produk'][$key] * Produk::find($produkId)->harga,
-            ]);
+        if (!empty($request->pelanggan_id) && $request->pelanggan_id !== "non-member") {
+            $penjualan->pelanggan_id = $request->pelanggan_id;
+            $penjualan->bukan_member = null;
+        } else {
+            $penjualan->pelanggan_id = null;
+            $penjualan->bukan_member = $request->nama_pelanggan ?? 'Tidak Diketahui';
         }
+
+        $penjualan->save();
 
         return redirect()->route('penjualan.index')->with('success', 'Penjualan berhasil ditambahkan.');
     }
@@ -76,4 +70,6 @@ class PenjualanController extends Controller
         // Redirect back to the penjualan list with a success message
         return redirect()->route('penjualan.index')->with('success', 'Penjualan berhasil dihapus.');
     }
+
+    
 }
