@@ -23,6 +23,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\ActivityLogger::class, // Tambahkan middleware ini
         ],
 
         'api' => [
@@ -35,5 +36,14 @@ class Kernel extends HttpKernel
         'auth' => \App\Http\Middleware\Authenticate::class,
         'role' => \App\Http\Middleware\RoleMiddleware::class, // Tambahkan middleware ini
     ];
+    protected function schedule(Schedule $schedule)
+{
+    $schedule->call(function () {
+        $petugas = \App\Models\User::where('role', 'petugas')->get();
+        foreach ($petugas as $user) {
+            $user->checkActivityStatus();
+        }
+    })->daily();
+}
 
 }
