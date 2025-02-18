@@ -9,7 +9,12 @@ use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\DetailPenjualanController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DetailUserController;
-use App\Http\Controllers\EditProfileController;
+use App\Http\Controllers\EditProfileController;// routes/web.php
+use App\Http\Controllers\PetugasController;
+
+
+
+
 
 Route::put('/profile/update', [EditProfileController::class, 'update'])->name('user.update');
 
@@ -17,6 +22,7 @@ Route::put('/profile/update', [EditProfileController::class, 'update'])->name('u
 Route::get('/', [AuthController::class, 'loginForm'])->name('login.form');
 Route::post('/', [AuthController::class, 'login'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
 
 // Registrasi
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register.form');
@@ -29,6 +35,16 @@ Route::middleware('auth')->group(function () {
     Route::resource('produk', ProdukController::class);
     Route::resource('penjualan', PenjualanController::class);
     Route::resource('detail-penjualan', DetailPenjualanController::class);
+    
+
+Route::get('/listpetugas', [PetugasController::class, 'index'])->name('petugas.list');
+Route::get('/listpetugas/create', [PetugasController::class, 'create'])->name('petugas.create');
+Route::post('/listpetugas/store', [PetugasController::class, 'store'])->name('petugas.store');
+Route::get('/listpetugas/edit/{id}', [PetugasController::class, 'edit'])->name('petugas.edit');
+Route::put('/listpetugas/update/{id}', [PetugasController::class, 'update'])->name('petugas.update');
+Route::delete('/listpetugas/destroy/{id}', [PetugasController::class, 'destroy'])->name('petugas.destroy');
+
+    
     Route::get('/user/{id}', [DetailUserController::class, 'show'])->name('user.detail');
     Route::get('/profile/edit/{id}', [EditProfileController::class, 'edit'])->name('user.edit');
     Route::put('/profile/update/{id}', [EditProfileController::class, 'update'])->name('user.update');      
