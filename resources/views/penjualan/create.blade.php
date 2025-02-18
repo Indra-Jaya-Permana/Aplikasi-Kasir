@@ -19,23 +19,14 @@
         </div>
 
         <div>
-    <label for="pelanggan_id">Pelanggan:</label>
-    <select id="pelanggan_id" name="pelanggan_id" onchange="updateTotal();" required>
-        <option value="">Pilih Pelanggan</option>
-        @foreach($pelanggans as $pelanggan)
-            <option value="{{ $pelanggan->id }}">{{ $pelanggan->id }} - {{ $pelanggan->nama_pelanggan }}</option>
-        @endforeach
-        
-    </select>
+            <label for="pelanggan_id">Pelanggan:</label>
+            <select id="pelanggan_id" name="pelanggan_id" required>
+                <option value="">Pilih Pelanggan</option>
+                @foreach($pelanggans as $pelanggan)
+                    <option value="{{ $pelanggan->id }}">{{ $pelanggan->id }} - {{ $pelanggan->nama_pelanggan }}</option>
+                @endforeach
+            </select>
         </div>
-
-        <div id="nama_pelanggan_input" style="display: none;">
-            <label for="nama_pelanggan">Nama Pelanggan (Bukan Member):</label>
-            <input type="text" name="nama_pelanggan" placeholder="Masukkan Nama Pelanggan">
-        </div>
-
-       
-
 
         <div id="produk_section">
             <label for="produk[]">Produk:</label>
@@ -65,16 +56,14 @@
     <script>
     function addProductField() {
         const additionalProducts = document.getElementById("additional_products");
-        const produkSection = document.getElementById("produk_section");
-        const newProductField = produkSection.cloneNode(true);
-        additionalProducts.appendChild(newProductField);
+        const produkSection = document.getElementById("produk_section").cloneNode(true);
+        additionalProducts.appendChild(produkSection);
     }
 
     function updateTotal() {
         let totalHarga = 0;
         const produkSelects = document.querySelectorAll('.produk-select');
         const jumlahInputs = document.querySelectorAll('.jumlah-produk');
-        const pelangganId = parseInt(document.getElementById("pelanggan_id").value) || 0; // Ambil ID pelanggan
 
         produkSelects.forEach((select, index) => {
             const harga = parseFloat(select.options[select.selectedIndex]?.getAttribute('data-harga') || 0);
@@ -82,23 +71,7 @@
             totalHarga += harga * jumlah;
         });
 
-        // Jika pelanggan ID lebih dari 2, berikan diskon 10%
-        if (pelangganId >= 2) {
-            totalHarga *= 0.9; // Diskon 10%
-        }
-
         document.getElementById("total_harga").value = totalHarga.toFixed(2);
     }
-
-    // Mendapatkan tanggal hari ini dalam format YYYY-MM-DD
-    function setTodayDate() {
-        let today = new Date();
-        let formattedDate = today.toISOString().split('T')[0]; // Ambil bagian YYYY-MM-DD saja
-        document.getElementById('tanggal_penjualan').value = formattedDate;
-    }
-
-    // Panggil fungsi saat halaman dimuat
-    window.onload = setTodayDate;
-</script>
-
+    </script>
 @endsection

@@ -14,7 +14,6 @@
             <li><a href="{{ route('pelanggan.index') }}">Pelanggan</a></li>
             <li><a href="{{ route('produk.index') }}">Produk</a></li>
             <li><a href="{{ route('penjualan.index') }}">Penjualan</a></li>
-
             <li><a href="{{ route('user.detail', Auth::user()->id) }}">Profil</a></li> <!-- Menambahkan link Profil -->
             <li>
                 <form action="{{ route('logout') }}" method="POST">

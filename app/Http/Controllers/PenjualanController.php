@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetailPenjualan;
 use App\Models\Penjualan;
 use App\Models\Pelanggan;
 use App\Models\Produk;
@@ -12,7 +13,7 @@ class PenjualanController extends Controller
     // Show a list of all penjualans
     public function index()
     {
-        $penjualans = Penjualan::all();
+        $penjualans = Penjualan::with('detailPenjualans')->get();
         return view('penjualan.index', compact('penjualans'));
     }
 
@@ -32,6 +33,8 @@ class PenjualanController extends Controller
             'total_harga' => 'required|numeric',
             'pelanggan_id' => 'nullable|exists:pelanggans,id',
             'nama_pelanggan' => 'nullable|string',
+            'produk' => 'required|array',
+            'jumlah_produk' => 'required|array',
         ]);
 
         $penjualan = new Penjualan();
@@ -45,6 +48,23 @@ class PenjualanController extends Controller
         }
 
         $penjualan->save();
+
+        // Simpan detail penjualan untuk setiap produk
+        foreach ($request->produk as $index => $produkId) {
+            $jumlah = $request->jumlah_produk[$index];
+
+            // Simpan detail penjualan
+            DetailPenjualan::create([
+                'penjualan_id' => $penjualan->id,
+                'produk_id' => $produkId,
+                'jumlah_produk' => $jumlah,
+                'subtotal' => Produk::find($produkId)->harga * $jumlah
+            ]);
+
+            // Kurangi stok produk
+            $produk = Produk::find($produkId);
+            $produk->kurangiStok($jumlah);
+        }
 
         return redirect()->route('penjualan.index')->with('success', 'Penjualan berhasil ditambahkan.');
     }
@@ -68,6 +88,4 @@ class PenjualanController extends Controller
         // Redirect back to the penjualan list with a success message
         return redirect()->route('penjualan.index')->with('success', 'Penjualan berhasil dihapus.');
     }
-
-    
 }
