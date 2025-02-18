@@ -24,11 +24,18 @@ class ProdukController extends Controller
             'nama_produk' => 'required|string|max:255',
             'harga' => 'required|numeric',
             'stok' => 'required|integer',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi gambar
         ]);
+
+        if ($request->hasFile('foto')) {
+            $fotoPath = $request->file('foto')->store('uploads/produk', 'public');
+            $validatedData['foto'] = $fotoPath;
+        }
 
         Produk::create($validatedData);
         return redirect()->route('produk.index')->with('success', 'Produk berhasil ditambahkan.');
     }
+
 
     public function edit($id)
     {
@@ -38,21 +45,26 @@ class ProdukController extends Controller
 
     public function update(Request $request, $id)
     {
-        
         $produk = Produk::findOrFail($id);
-
-        // Debugging untuk melihat apakah data dikirim dengan benar
-        // dd($request->all());
-
+    
         $validatedData = $request->validate([
             'nama_produk' => 'required|string|max:255',
             'harga' => 'required|numeric',
             'stok' => 'required|integer',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
+    
+        if ($request->hasFile('foto')) {
+            if ($produk->foto) {
+                Storage::disk('public')->delete($produk->foto);
+            }
+            $validatedData['foto'] = $request->file('foto')->store('uploads/produk', 'public');
+        }
+    
         $produk->update($validatedData);
         return redirect()->route('produk.index')->with('success', 'Produk berhasil diperbarui.');
     }
+    
 
     public function destroy($id)
     {
