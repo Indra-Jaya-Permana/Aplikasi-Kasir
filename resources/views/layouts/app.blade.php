@@ -10,7 +10,12 @@
     @if (!in_array(Route::currentRouteName(), ['login', 'register.form']))
     <nav>
         <ul>
+            if role admin
             <li><a href="{{ route('pelanggan.index') }}">Pelanggan</a></li>
+            <li><a href="{{ route('produk.index') }}">Produk</a></li>
+            <li><a href="{{ route('penjualan.index') }}">Penjualan</a></li>
+            else
+            <li><a href="{{ route('pelanggan-biasa.index') }}">Pelanggan</a></li>
             <li><a href="{{ route('produk.index') }}">Produk</a></li>
             <li><a href="{{ route('penjualan.index') }}">Penjualan</a></li>
             <li><a href="{{ route('user.detail', Auth::user()->id) }}">Profil</a></li> <!-- Menambahkan link Profil -->
