@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DetailPenjualan;
 use App\Models\Penjualan;
 use App\Models\Pelanggan;
 use App\Models\Produk;
+use App\Models\DetailPenjualan; // Pastikan ini ada
 use Illuminate\Http\Request;
 
 class PenjualanController extends Controller
@@ -53,16 +53,23 @@ class PenjualanController extends Controller
         foreach ($request->produk as $index => $produkId) {
             $jumlah = $request->jumlah_produk[$index];
 
+            // Ambil produk
+            $produk = Produk::findOrFail($produkId);
+
+            // Periksa apakah stok cukup
+            if ($produk->stok < $jumlah) {
+                return redirect()->back()->with('error', 'Stok tidak cukup untuk produk ' . $produk->nama_produk);
+            }
+
             // Simpan detail penjualan
             DetailPenjualan::create([
                 'penjualan_id' => $penjualan->id,
                 'produk_id' => $produkId,
                 'jumlah_produk' => $jumlah,
-                'subtotal' => Produk::find($produkId)->harga * $jumlah
+                'subtotal' => $produk->harga * $jumlah
             ]);
 
             // Kurangi stok produk
-            $produk = Produk::find($produkId);
             $produk->kurangiStok($jumlah);
         }
 
