@@ -10,11 +10,20 @@ use Illuminate\Support\Facades\Hash;
 class PetugasController extends Controller
 {
     // Menampilkan daftar petugas
-    public function index()
+    public function index(Request $request)
     {
-        $petugas = User::where('role', 'petugas')->get();
+        $query = User::where('role', 'petugas');
+    
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('email', 'like', '%' . $request->search . '%');
+            });
+        }
+    
+        $petugas = $query->get();
         return view('petugas.list', compact('petugas'));
-    }
+    }    
 
     // Menampilkan form tambah petugas
     public function create()

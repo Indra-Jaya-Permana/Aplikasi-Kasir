@@ -11,9 +11,15 @@ use Illuminate\Http\Request;
 class PenjualanController extends Controller
 {
     // Show a list of all penjualans
-    public function index()
+    public function index(Request $request)
     {
-        $penjualans = Penjualan::with('detailPenjualans')->get();
+        $query = Penjualan::query();
+
+        if ($request->has('search')) {
+            $query->whereDate('tanggal_penjualan', $request->search);
+        }
+
+        $penjualans = $query->with('pelanggan')->get();
         return view('penjualan.index', compact('penjualans'));
     }
 

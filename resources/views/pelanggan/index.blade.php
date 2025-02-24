@@ -15,6 +15,14 @@
     @if(session('success'))
         <p>{{ session('success') }}</p>
     @endif
+    <form action="{{ route('pelanggan.index') }}" method="GET">
+        <input type="text" name="search" placeholder="Cari pelanggan..." value="{{ request('search') }}">
+        <button type="submit">Cari</button>
+    </form>
+
+    @if($pelanggans->isEmpty())
+        <p>Data tidak ditemukan.</p>
+    @else
 
     <table>
         <thead>
@@ -47,4 +55,5 @@
             @endforeach
         </tbody>
     </table>
+    @endif
 @endsection

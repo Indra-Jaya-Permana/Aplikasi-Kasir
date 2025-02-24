@@ -12,6 +12,12 @@
             <button type="submit">Tambah Produk</button>
         </form>
     </li>
+
+    <form action="{{ route('produk.index') }}" method="GET">
+        <input type="text" name="search" placeholder="Cari produk..." value="{{ request('search') }}">
+        <button type="submit">Cari</button>
+    </form>
+
     <table>
     <thead>
         <tr>

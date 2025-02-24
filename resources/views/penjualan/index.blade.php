@@ -12,6 +12,16 @@
             <button type="submit">Tambah Penjualan</button>
         </form>
     </li>
+
+    <form action="{{ route('penjualan.index') }}" method="GET">
+    <input type="date" name="search" value="{{ request('search') }}">
+    <button type="submit">Cari</button>
+</form>
+
+@if($penjualans->isEmpty())
+    <p>Data tidak ditemukan.</p>
+@else
+
     <table>
         <thead>
             <tr>
@@ -45,4 +55,5 @@
     @endforeach
     </tbody>
     </table>
+    @endif
 @endsection

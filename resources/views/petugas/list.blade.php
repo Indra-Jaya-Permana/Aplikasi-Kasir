@@ -7,6 +7,14 @@
     <h2>Daftar Petugas</h2>
     <a href="{{ route('petugas.create') }}" class="btn btn-primary mb-3">Tambah Petugas</a> <!-- Tombol Tambah -->
     
+        <form action="{{ route('petugas.list') }}" method="GET">
+        <input type="text" name="search" placeholder="Cari petugas..." value="{{ request('search') }}">
+        <button type="submit">Cari</button>
+    </form>
+
+    @if($petugas->isEmpty())
+        <p>Data tidak ditemukan.</p>
+    @else
     <table class="table">
         <thead>
             <tr>
@@ -34,5 +42,6 @@
             @endforeach
         </tbody>
     </table>
+    @endif
 </div>
 @endsection
