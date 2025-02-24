@@ -1,3 +1,7 @@
+@extends('layouts/app')
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+@endpush
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -54,6 +58,12 @@
                         </td>
                     </tr>
                     <a href="{{ route('user.edit', $user->id) }}" class="btn btn-warning">Edit Profil</a>
+                    <li>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit">Logout</button>
+                        </form>
+                    </li>
                 </table>
             </div>
         </div>

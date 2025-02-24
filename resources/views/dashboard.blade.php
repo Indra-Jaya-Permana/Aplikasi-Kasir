@@ -1,9 +1,10 @@
 @extends('layouts/app')
-
 @section('title', 'Dashboard')
-
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+@endpush
 @section('content')
-    <h1>DASHBOARD</h1>
+    <h2>WELCOME TO CASHERE</h2>
     <div class="row">
         <div class="col-md-3">
             <div class="card">
@@ -39,12 +40,12 @@
         </div>
     </div>
     
-    <h2>Transaksi Terbaru</h2>
-    <table>
+  <h2>TRANSAKSI TERBARU</h2>
+<div class="table-container">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>No</th>
-                <th>Pelanggan</th>
                 <th>Total Harga</th>
                 <th>Tanggal</th>
             </tr>
@@ -52,12 +53,13 @@
         <tbody>
             @foreach($transaksiTerbaru as $key => $transaksi)
             <tr>
-                <td>{{ $key + 1 }}</td>
-                <td>{{ $transaksi->pelanggan->nama }}</td>
-                <td>Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</td>
-                <td>{{ $transaksi->created_at->format('d M Y') }}</td>
+                <td>{{ $key + 1 }}</td> <!-- Nama Pelanggan -->
+                <td>Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</td> <!-- Total Harga -->
+                <td>{{ $transaksi->created_at->format('d M Y') }}</td> <!-- Tanggal -->
             </tr>
             @endforeach
         </tbody>
     </table>
+</div>
+
 @endsection

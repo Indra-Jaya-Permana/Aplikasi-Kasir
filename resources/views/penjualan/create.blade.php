@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('title', 'Tambah Penjualan')
-
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+@endpush
 @section('content')
     <h1>Tambah Penjualan</h1>
 

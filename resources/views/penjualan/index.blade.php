@@ -1,10 +1,17 @@
 @extends('layouts.app')
 
 @section('title', 'Data Penjualan')
-
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+@endpush
 @section('content')
     <h1>Data Penjualan</h1>
-    <a href="{{ route('penjualan.create') }}">Tambah Penjualan</a>
+    <li>
+        <form action="{{ route('penjualan.create') }}" method="GET">
+            @csrf
+            <button type="submit">Tambah Penjualan</button>
+        </form>
+    </li>
     <table>
         <thead>
             <tr>

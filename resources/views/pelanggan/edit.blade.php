@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('title', 'Edit Pelanggan')
-
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+@endpush
 @section('content')
     <h1>Edit Pelanggan</h1>
     <form action="{{ route('pelanggan.update', $pelanggan->id) }}" method="POST">
