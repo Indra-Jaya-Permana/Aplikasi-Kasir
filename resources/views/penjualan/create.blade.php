@@ -59,7 +59,7 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <script>
-    $(document).ready(function() {
+        $(document).ready(function() {
         let pelangganData = @json($pelanggans);
         let produkData = @json($produks);
 
@@ -69,6 +69,7 @@
             select: function(event, ui) {
                 $("#pelanggan_display").val(ui.item.label);
                 $("#pelanggan_id").val(ui.item.value);
+                updateTotal(); // Panggil update total setelah pelanggan dipilih
             }
         });
 
@@ -79,15 +80,24 @@
                 let parentDiv = $(this).closest("#produk_section");
                 parentDiv.find(".produk-display").val(ui.item.label);
                 parentDiv.find(".produk-id").val(ui.item.value);
-                parentDiv.find(".produk-harga").val(ui.item.harga); // Simpan harga produk
+                parentDiv.find(".produk-harga").val(ui.item.harga);
                 updateTotal();
             }
+        });
+
+        // Pastikan update total dipanggil jika pelanggan berubah
+        $("#pelanggan_id").on("change", function() {
+            updateTotal();
         });
     });
 
     function addProductField() {
         const additionalProducts = document.getElementById("additional_products");
         const produkSection = document.getElementById("produk_section").cloneNode(true);
+        
+        // Reset input dalam produk yang baru ditambahkan
+        $(produkSection).find("input").val("");
+
         additionalProducts.appendChild(produkSection);
 
         // Terapkan autocomplete ke input produk baru
@@ -97,9 +107,14 @@
                 let parentDiv = $(this).closest("#produk_section");
                 parentDiv.find(".produk-display").val(ui.item.label);
                 parentDiv.find(".produk-id").val(ui.item.value);
-                parentDiv.find(".produk-harga").val(ui.item.harga); // Simpan harga produk
+                parentDiv.find(".produk-harga").val(ui.item.harga);
                 updateTotal();
             }
+        });
+
+        // Pastikan event jumlah produk juga memicu updateTotal()
+        $(produkSection).find(".jumlah-produk").on("input", function() {
+            updateTotal();
         });
     }
 
@@ -107,19 +122,20 @@
         let totalHarga = 0;
         const jumlahInputs = document.querySelectorAll('.jumlah-produk');
 
-        jumlahInputs.forEach((input, index) => {
-            const harga = parseFloat($(input).closest("#produk_section").find(".produk-harga").val()) || 0; // Ambil harga dari input hidden
+        jumlahInputs.forEach((input) => {
+            const harga = parseFloat($(input).closest("#produk_section").find(".produk-harga").val()) || 0;
             const jumlah = parseInt(input.value) || 1;
             totalHarga += harga * jumlah;
         });
 
-        // Terapkan diskon jika ID pelanggan >= 2
+        // Cek ID pelanggan dan terapkan diskon jika lebih dari 1
         const pelangganId = parseInt(document.getElementById("pelanggan_id").value) || 0;
-        if (pelangganId >= 2) {
+        if (pelangganId > 1) {
             totalHarga *= 0.9; // Diskon 10%
         }
 
         document.getElementById("total_harga").value = totalHarga.toFixed(2);
     }
+
     </script>
 @endsection
