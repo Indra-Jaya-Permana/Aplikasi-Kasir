@@ -1,11 +1,17 @@
 @extends('layouts.app')
 
 @section('title', 'Data Pelanggan')
-
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+@endpush
 @section('content')
     <h1>Data Pelanggan</h1>
-    <a href="{{ route('pelanggan.create') }}">Tambah Pelanggan</a>
-
+    <li>
+        <form action="{{ route('pelanggan.create') }}" method="GET">
+            @csrf
+            <button type="submit">Tambah Pelanggan</button>
+        </form>
+    </li>
     @if(session('success'))
         <p>{{ session('success') }}</p>
     @endif
@@ -25,14 +31,18 @@
                     <td>{{ $pelanggan->nama_pelanggan }}</td>
                     <td>{{ $pelanggan->alamat }}</td>
                     <td>{{ $pelanggan->nomor_telepon }}</td>
-                    <td>
-                        <a href="{{ route('pelanggan.edit', $pelanggan->id) }}">Edit</a>
-                        <form action="{{ route('pelanggan.destroy', $pelanggan->id) }}" method="POST" style="display:inline;">
+                    <td class="icon-wrapperpelanggan">
+                        <a href="{{ route('pelanggan.edit', $pelanggan->id) }}">
+                            <img class="icon" src="{{ asset('image/icons8-edit-50.png') }}" alt="Edit">
+                        </a>
+                        <form action="{{ route('pelanggan.destroy', $pelanggan->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus pelanggan ini?')">Hapus</button>
+                            <button type="submit" class="icon-btn">
+                                <img class="icon" src="{{ asset('image/delete.png') }}" alt="Hapus">
+                            </button>
                         </form>
-                    </td>
+                    </td>                                 
                 </tr>
             @endforeach
         </tbody>

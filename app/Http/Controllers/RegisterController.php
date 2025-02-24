@@ -31,7 +31,7 @@ class RegisterController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password), // Pastikan password di-hash
-            'role' => 'petugas', // Set role otomatis jadi petugas
+            'role' => 'admin', // Set role otomatis jadi petugas
         ]);
 
         // Debugging: Cek apakah user berhasil dibuat

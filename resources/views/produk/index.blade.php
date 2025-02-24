@@ -1,10 +1,17 @@
 @extends('layouts.app')
 
 @section('title', 'Data Produk')
-
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+@endpush
 @section('content')
     <h1>Data Produk</h1>
-    <a href="{{ route('produk.create') }}">Tambah Produk</a>
+    <li>
+        <form action="{{ route('produk.create') }}" method="GET">
+            @csrf
+            <button type="submit">Tambah Produk</button>
+        </form>
+    </li>
     <table>
     <thead>
         <tr>
@@ -28,12 +35,16 @@
             <td>{{ $produk->nama_produk }}</td>
             <td>{{ $produk->harga }}</td>
             <td>{{ $produk->stok }}</td>
-            <td>
-                <a href="{{ route('produk.edit', $produk->id) }}">Edit</a>
-                <form action="{{ route('produk.destroy', $produk->id) }}" method="POST" style="display:inline;">
+            <td class="icon-wrapper">
+                <a href="{{ route('produk.edit', $produk->id) }}">
+                    <img class="icon" src="{{ asset('image/icons8-edit-50.png') }}" alt="Edit">
+                </a>
+                <form action="{{ route('produk.destroy', $produk->id) }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit">Hapus</button>
+                    <button type="submit" class="icon-btn">
+                        <img class="icon" src="{{ asset('image/delete.png') }}" alt="Hapus">
+                    </button>
                 </form>
             </td>
         </tr>

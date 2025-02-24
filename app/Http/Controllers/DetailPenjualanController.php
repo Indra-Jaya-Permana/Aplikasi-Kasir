@@ -38,6 +38,8 @@ class DetailPenjualanController extends Controller
             'produk_id' => $request->produk_id,
             'jumlah_produk' => $request->jumlah_produk,
             'subtotal' => $subtotal
+            
+
         ]);
 
         // Kurangi stok produk

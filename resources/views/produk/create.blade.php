@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('title', 'Tambah Produk')
-
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+@endpush
 @section('content')
     <h1>Tambah Produk</h1>
     <form action="{{ route('produk.store') }}" method="POST" enctype="multipart/form-data">
